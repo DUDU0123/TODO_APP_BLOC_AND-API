@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lottie/lottie.dart';
 import 'package:todo_app_bloc_api/application/bloc/todo_list_bloc.dart';
+import 'package:todo_app_bloc_api/components/add_edit/add_todo_navigate_widget.dart';
+import 'package:todo_app_bloc_api/components/add_edit/list_tile_buttons_widget.dart';
+import 'package:todo_app_bloc_api/components/add_edit/no_reason_widget.dart';
 import 'package:todo_app_bloc_api/components/common/common_circular_progress_indicator_widget.dart';
 import 'package:todo_app_bloc_api/components/common/common_list_empty_show_widget.dart';
 import 'package:todo_app_bloc_api/components/common/snackbar.dart';
 import 'package:todo_app_bloc_api/components/common/text_widget_common.dart';
 import 'package:todo_app_bloc_api/constants/colors.dart';
 import 'package:todo_app_bloc_api/constants/height_width.dart';
-import 'package:todo_app_bloc_api/enums/enums.dart';
-import 'package:todo_app_bloc_api/presentation/add_or_edit_todo/add_or_edit_todo_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -75,86 +75,12 @@ class _HomePageState extends State<HomePage> {
                     ),
                     onTap: () {},
                     title: TextWidgetCommon(
+                      overflow: TextOverflow.ellipsis,
                       fontWeight: FontWeight.w500,
                       text: state.todoList[index].todoTitle,
                       textColor: kWhite,
                     ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AddOrEditTodoPage(
-                                  todoModel: state.todoList[index],
-                                  pageType: PageType.editTodo,
-                                ),
-                              ),
-                            );
-                          },
-                          icon: Icon(
-                            Icons.edit,
-                            color: kWhite,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            //id
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                content: const TextWidgetCommon(
-                                  text: "Do you want to delete this todo?",
-                                ),
-                                title: const TextWidgetCommon(text: "Delete"),
-                                actions: [
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: kWhite),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: TextWidgetCommon(
-                                      text: "Cancel",
-                                      textColor: kBlack,
-                                    ),
-                                  ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: kRed),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      state.todoList[index].todoId != null
-                                          ? context.read<TodoListBloc>().add(
-                                                DeleteTodoEvent(
-                                                  todoId: state
-                                                      .todoList[index].todoId!,
-                                                ),
-                                              )
-                                          : null;
-
-                                      context
-                                          .read<TodoListBloc>()
-                                          .add(FetchedAllTodosEvent());
-                                    },
-                                    child: TextWidgetCommon(
-                                      text: "Delete",
-                                      textColor: kWhite,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          icon: Icon(
-                            Icons.delete_outline,
-                            color: kWhite,
-                          ),
-                        ),
-                      ],
-                    ),
+                    trailing: ListTileButtonsWidget(todoModel: state.todoList[index],),
                   );
                 },
                 itemCount: state.todoList.length,
@@ -170,45 +96,5 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class NoReasonWidget extends StatelessWidget {
-  const NoReasonWidget({
-    super.key,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: TextWidgetCommon(
-        text: "No Todos Added",
-      ),
-    );
-  }
-}
-
-class AddTodoNavigateWidget extends StatelessWidget {
-  const AddTodoNavigateWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton.extended(
-      backgroundColor: kWhite,
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const AddOrEditTodoPage(
-              pageType: PageType.addTodo,
-            ),
-          ),
-        );
-      },
-      label: TextWidgetCommon(
-        text: "Add Todo",
-        textColor: kBlack,
-      ),
-    );
-  }
-}
 
