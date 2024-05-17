@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:todo_app_bloc_api/application/bloc/todo_list_bloc.dart';
 import 'package:todo_app_bloc_api/components/common/common_circular_progress_indicator_widget.dart';
+import 'package:todo_app_bloc_api/components/common/common_list_empty_show_widget.dart';
 import 'package:todo_app_bloc_api/components/common/snackbar.dart';
 import 'package:todo_app_bloc_api/components/common/text_widget_common.dart';
 import 'package:todo_app_bloc_api/constants/colors.dart';
@@ -59,11 +60,7 @@ class _HomePageState extends State<HomePage> {
           if (state is TodoSuccessState) {
             return Visibility(
               visible: state.todoList.isNotEmpty,
-              replacement: const Center(
-                child: TextWidgetCommon(
-                  text: "No Todos Added",
-                ),
-              ),
+              replacement: const CommonListEmptyShowWidget(),
               child: ListView.separated(
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                 itemBuilder: (context, index) {
@@ -91,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => AddOrEditTodoPage(
-                                  todoId: state.todoList[index].todoId,
+                                  todoModel: state.todoList[index],
                                   pageType: PageType.editTodo,
                                 ),
                               ),
@@ -114,6 +111,19 @@ class _HomePageState extends State<HomePage> {
                                 title: const TextWidgetCommon(text: "Delete"),
                                 actions: [
                                   ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: kWhite),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: TextWidgetCommon(
+                                      text: "Cancel",
+                                      textColor: kBlack,
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: kRed),
                                     onPressed: () {
                                       Navigator.pop(context);
                                       state.todoList[index].todoId != null
@@ -131,15 +141,6 @@ class _HomePageState extends State<HomePage> {
                                     },
                                     child: TextWidgetCommon(
                                       text: "Delete",
-                                      textColor: kRed,
-                                    ),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: TextWidgetCommon(
-                                      text: "Cancel",
                                       textColor: kWhite,
                                     ),
                                   ),
@@ -161,31 +162,53 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           }
-
-          return const Center(
-            child: TextWidgetCommon(
-              text: "No Todos Added",
-            ),
-          );
+          return const NoReasonWidget();
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: kWhite,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AddOrEditTodoPage(
-                pageType: PageType.addTodo,
-              ),
-            ),
-          );
-        },
-        label: TextWidgetCommon(
-          text: "Add Todo",
-          textColor: kBlack,
-        ),
+      floatingActionButton: const AddTodoNavigateWidget(),
+    );
+  }
+}
+
+class NoReasonWidget extends StatelessWidget {
+  const NoReasonWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: TextWidgetCommon(
+        text: "No Todos Added",
       ),
     );
   }
 }
+
+class AddTodoNavigateWidget extends StatelessWidget {
+  const AddTodoNavigateWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton.extended(
+      backgroundColor: kWhite,
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AddOrEditTodoPage(
+              pageType: PageType.addTodo,
+            ),
+          ),
+        );
+      },
+      label: TextWidgetCommon(
+        text: "Add Todo",
+        textColor: kBlack,
+      ),
+    );
+  }
+}
+

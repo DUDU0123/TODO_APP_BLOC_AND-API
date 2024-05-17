@@ -11,18 +11,27 @@ import 'package:todo_app_bloc_api/data/models/todo_model.dart';
 import 'package:todo_app_bloc_api/enums/enums.dart';
 
 class AddOrEditTodoPage extends StatefulWidget {
-  const AddOrEditTodoPage({super.key, required this.pageType, this.todoId});
+  const AddOrEditTodoPage({super.key, required this.pageType, this.todoModel});
   final PageType pageType;
-  final String? todoId;
+  final TodoModel? todoModel;
 
   @override
   State<AddOrEditTodoPage> createState() => _AddOrEditTodoPageState();
 }
 
 class _AddOrEditTodoPageState extends State<AddOrEditTodoPage> {
+  
   TextEditingController titleController = TextEditingController();
 
   TextEditingController descriptionController = TextEditingController();
+  @override
+  void initState() {
+    if (widget.todoModel!=null && widget.pageType==PageType.editTodo) {
+      titleController.text = widget.todoModel!.todoTitle;
+      descriptionController.text = widget.todoModel!.todoDescription;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +80,7 @@ class _AddOrEditTodoPageState extends State<AddOrEditTodoPage> {
                   todoDescription: description,
                 );
                 TodoModel editedTodoModel = TodoModel(
-                  todoId: widget.todoId,
+                  todoId: widget.todoModel?.todoId,
                   todoTitle: title,
                   todoDescription: description,
                 );
