@@ -12,22 +12,14 @@ class RootWidgetPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(builder: (context, _) {
-      return MultiRepositoryProvider(
-        providers: [
-          RepositoryProvider(
-            create: (context) => TodoRespository(
-              todoProvider: TodoProvider(),
-            ),
+      return RepositoryProvider(
+        create: (context) => TodoRespository(
+            todoProvider: TodoProvider(),
           ),
-        ],
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => TodoListBloc(
-                context.read<TodoRespository>(),
-              )..add(FetchedAllTodosEvent()),
-            ),
-          ],
+        child: BlocProvider(
+          create: (context) => TodoListBloc(
+            context.read<TodoRespository>(),
+          )..add(FetchedAllTodosEvent()),
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData.dark(),

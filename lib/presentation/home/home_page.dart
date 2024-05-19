@@ -11,7 +11,6 @@ import 'package:todo_app_bloc_api/components/common/snackbar.dart';
 import 'package:todo_app_bloc_api/components/common/text_widget_common.dart';
 import 'package:todo_app_bloc_api/constants/colors.dart';
 import 'package:todo_app_bloc_api/constants/height_width.dart';
-
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -80,6 +79,12 @@ class _HomePageState extends State<HomePage> {
                       text: state.todoList[index].todoTitle,
                       textColor: kWhite,
                     ),
+                    subtitle: TextWidgetCommon(
+                      overflow: TextOverflow.ellipsis,
+                      fontWeight: FontWeight.w400,
+                      text: state.todoList[index].todoDescription,
+                      textColor: kWhite,
+                    ),
                     trailing: ListTileButtonsWidget(todoModel: state.todoList[index],),
                   );
                 },
@@ -95,6 +100,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-
-
