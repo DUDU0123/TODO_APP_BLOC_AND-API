@@ -45,7 +45,7 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
           await todoRespository.addTodo(todoModel: event.todoModel);
 
       if (statusCode == 201) {
-        emit(AddTodoState(message: "Successfully Added"));
+        emit(TodoResponseState(message: "Successfully Added"));
       } else {
         emit(TodoErrorState(errorMessage: "Unable to add todo"));
       }
@@ -61,7 +61,7 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
           await todoRespository.editTodo(todoModel: event.todoModel);
 
       if (statusCode == 200) {
-        emit(EditTodoState(message: 'Edited Successfully'));
+        emit(TodoResponseState(message: 'Edited Successfully'));
       } else {
         emit(TodoErrorState(errorMessage: "Unable to edit todo"));
       }
@@ -75,7 +75,7 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
     try {
       final statusCode = await todoRespository.deleteTodo(todoId: event.todoId);
       if (statusCode == 200) {
-        emit(DeleteTodoState(message: 'Deleted Successfully'));
+        emit(TodoResponseState(message: 'Deleted Successfully'));
       } else {
         emit(TodoErrorState(errorMessage: "Unable to delete todo"));
       }

@@ -9,8 +9,10 @@ import 'package:todo_app_bloc_api/components/common/common_circular_progress_ind
 import 'package:todo_app_bloc_api/components/common/common_list_empty_show_widget.dart';
 import 'package:todo_app_bloc_api/components/common/snackbar.dart';
 import 'package:todo_app_bloc_api/components/common/text_widget_common.dart';
+import 'package:todo_app_bloc_api/components/profile/profile_bottom_sheet.dart';
 import 'package:todo_app_bloc_api/constants/colors.dart';
 import 'package:todo_app_bloc_api/constants/height_width.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -27,28 +29,18 @@ class _HomePageState extends State<HomePage> {
       ),
       body: BlocConsumer<TodoListBloc, TodoListState>(
         listener: (context, state) {
-          if (state is AddTodoState) {
+          if (state is TodoResponseState) {
             context.read<TodoListBloc>().add(FetchedAllTodosEvent());
             snackBar(text: state.message, context: context);
           }
           if (state is TodoErrorState) {
             snackBar(text: state.errorMessage, context: context);
           }
-          if (state is DeleteTodoState) {
-            context.read<TodoListBloc>().add(FetchedAllTodosEvent());
-            snackBar(text: state.message, context: context);
-          }
-
-          if (state is EditTodoState) {
-            context.read<TodoListBloc>().add(FetchedAllTodosEvent());
-            snackBar(text: state.message, context: context);
-          }
         },
         builder: (context, state) {
           if (state is TodoLoadingState) {
             return const CommonCircularProgressIndicatorWidget();
           }
-
           if (state is TodoErrorState) {
             return Center(
               child: TextWidgetCommon(
@@ -72,7 +64,9 @@ class _HomePageState extends State<HomePage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.sp),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      profileBottomSheet(context, state.todoList[index]);
+                    },
                     title: TextWidgetCommon(
                       overflow: TextOverflow.ellipsis,
                       fontWeight: FontWeight.w500,
@@ -85,7 +79,9 @@ class _HomePageState extends State<HomePage> {
                       text: state.todoList[index].todoDescription,
                       textColor: kWhite,
                     ),
-                    trailing: ListTileButtonsWidget(todoModel: state.todoList[index],),
+                    trailing: ListTileButtonsWidget(
+                      todoModel: state.todoList[index],
+                    ),
                   );
                 },
                 itemCount: state.todoList.length,
@@ -99,4 +95,5 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: const AddTodoNavigateWidget(),
     );
   }
+
 }

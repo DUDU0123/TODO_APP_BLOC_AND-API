@@ -19,23 +19,9 @@ class TodoErrorState extends TodoListState {
   });
 }
 
-class AddTodoState extends TodoListState {
+class TodoResponseState extends TodoListState {
   final String message;
-  AddTodoState({
-    required this.message,
-  });
-}
-
-class EditTodoState extends TodoListState {
-  final String message;
-  EditTodoState({
-    required this.message,
-  });
-}
-
-class DeleteTodoState extends TodoListState {
-  final String message;
-  DeleteTodoState({
+  TodoResponseState({
     required this.message,
   });
 }
