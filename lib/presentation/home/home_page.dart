@@ -68,12 +68,14 @@ class _HomePageState extends State<HomePage> {
                       profileBottomSheet(context, state.todoList[index]);
                     },
                     title: TextWidgetCommon(
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       fontWeight: FontWeight.w500,
                       text: state.todoList[index].todoTitle,
                       textColor: kWhite,
                     ),
                     subtitle: TextWidgetCommon(
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       fontWeight: FontWeight.w400,
                       text: state.todoList[index].todoDescription,
