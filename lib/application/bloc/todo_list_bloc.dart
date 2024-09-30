@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:todo_app_bloc_api/data/models/todo_model.dart';
 import 'package:todo_app_bloc_api/data/repository/todo_repository.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart';
 part 'todo_list_event.dart';
 part 'todo_list_state.dart';
 
@@ -20,12 +19,10 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
 
   Future<FutureOr<void>> getAllTodosEvent(
       TodoListEvent event, Emitter<TodoListState> emit) async {
-    emit(TodoLoadingState());
     try {
-      await Future.delayed(const Duration(milliseconds: 3200));
       final todoList = await todoRespository.getAllTodos();
       emit(
-        TodoSuccessState(
+        TodoListState(
           todoList: todoList,
         ),
       );
@@ -45,7 +42,7 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
           await todoRespository.addTodo(todoModel: event.todoModel);
 
       if (statusCode == 201) {
-        emit(TodoResponseState(message: "Successfully Added"));
+        emit(state.copyWith(message: "Successfully Added"));
       } else {
         emit(TodoErrorState(errorMessage: "Unable to add todo"));
       }
@@ -61,7 +58,7 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
           await todoRespository.editTodo(todoModel: event.todoModel);
 
       if (statusCode == 200) {
-        emit(TodoResponseState(message: 'Edited Successfully'));
+        emit(state.copyWith(message: 'Edited Successfully'));
       } else {
         emit(TodoErrorState(errorMessage: "Unable to edit todo"));
       }
@@ -75,7 +72,7 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
     try {
       final statusCode = await todoRespository.deleteTodo(todoId: event.todoId);
       if (statusCode == 200) {
-        emit(TodoResponseState(message: 'Deleted Successfully'));
+        emit(state.copyWith(message: 'Deleted Successfully'));
       } else {
         emit(TodoErrorState(errorMessage: "Unable to delete todo"));
       }

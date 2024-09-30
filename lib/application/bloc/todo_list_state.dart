@@ -1,27 +1,27 @@
 part of 'todo_list_bloc.dart';
 
 @immutable
-sealed class TodoListState {}
+class TodoListState {
+  final List<TodoModel>? todoList;
+   final String? message;
+  const TodoListState({
+     this.todoList,
+     this.message,
+  });
+  TodoListState copyWith({List<TodoModel>? todoList,String? message,}){
+    return TodoListState(
+      message: message??this.message,
+      todoList: todoList??this.todoList,
+    );
+  }
+}
 
 final class TodoListInitial extends TodoListState {}
 
 class TodoLoadingState extends TodoListState{}
-class TodoSuccessState extends TodoListState {
-  final List<TodoModel> todoList;
-  TodoSuccessState({
-    required this.todoList,
-  });
-}
 class TodoErrorState extends TodoListState {
   final String errorMessage;
-  TodoErrorState({
+ const TodoErrorState({
     required this.errorMessage,
-  });
-}
-
-class TodoResponseState extends TodoListState {
-  final String message;
-  TodoResponseState({
-    required this.message,
   });
 }

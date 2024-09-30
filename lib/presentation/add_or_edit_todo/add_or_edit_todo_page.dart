@@ -75,10 +75,9 @@ class _AddOrEditTodoPageState extends State<AddOrEditTodoPage> {
                   todoTitle: title,
                   todoDescription: description,
                 );
-                TodoModel editedTodoModel = TodoModel(
-                  todoId: widget.todoModel?.todoId,
-                  todoTitle: title,
-                  todoDescription: description,
+                TodoModel? editedTodoModel = widget.todoModel?.copyWith(
+                  todoDescription: description.isNotEmpty?description:widget.todoModel?.todoDescription,
+                  todoTitle: title.isNotEmpty?title:widget.todoModel?.todoTitle,
                 );
                 widget.pageType == PageType.addTodo
                     ? context.read<TodoListBloc>().add(
@@ -86,9 +85,9 @@ class _AddOrEditTodoPageState extends State<AddOrEditTodoPage> {
                             todoModel: todoModel,
                           ),
                         )
-                    : context.read<TodoListBloc>().add(
+                    :editedTodoModel!=null? context.read<TodoListBloc>().add(
                           EditTodoEvent(todoModel: editedTodoModel),
-                        );
+                        ):null;
                 Navigator.pop(context);
                 titleController.text = '';
                 descriptionController.text = '';

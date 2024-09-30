@@ -21,8 +21,7 @@ class TodoRespository implements ITodoRespository {
   @override
   Future<int> addTodo({required TodoModel todoModel}) {
     return todoProvider.addTodo(
-      title: todoModel.todoTitle,
-      description: todoModel.todoDescription,
+      todoModel: todoModel,
     );
   }
 
@@ -32,12 +31,10 @@ class TodoRespository implements ITodoRespository {
   }
 
   @override
-  Future<int> editTodo({required TodoModel todoModel}) async{
+  Future<int> editTodo({required TodoModel todoModel}) async {
     if (todoModel.todoId != null) {
       return todoProvider.editTodo(
-        id: todoModel.todoId!,
-        title: todoModel.todoTitle,
-        description: todoModel.todoDescription,
+        todoModel: todoModel,
       );
     }
     return 0;
